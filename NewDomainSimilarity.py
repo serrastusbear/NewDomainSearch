@@ -20,6 +20,7 @@ import math, requests, os, zipfile, io, datetime, difflib, editdistance, argpars
 def argumentParser():
     parser = argparse.ArgumentParser()
     parser.add_argument('wordlist', action='store', help='Word List file to use for similarity matches')
+    parser.add_argument('outputDirectory', action='store', help='Location for output, default is CWD')
     parser.add_argument('-t', '--type', choices=['s','e','j'], default='s', help='''Pick similarity calculation type:s
                                                                                  for difflib similarity, e for edit
                                                                                  distance, J for Jaccard''')
@@ -119,7 +120,7 @@ if __name__ == '__main__':
     #print('Selected function: ' + parser.type)
     dictionaryList = openFileReturnAsList(parser.wordlist)
     #print("Dictionary list loaded")
-    domainList = retrieveDomainList(calculatePreviousDay())
+    domainList = retrieveDomainList()
     #print("Domain list retrieved")
     scorelist = scoringFunction(parser.type, dictionaryList, domainList)
     #print("Scoring function complete")
@@ -130,7 +131,7 @@ if __name__ == '__main__':
     elif parser.type == "j":
         type = "jaccard"
     sortScore = sorted(scorelist, key=lambda Domain: Domain.score, reverse=True)
-    fileName = 'newDomains_' + calculatePreviousDay() + '_' + type + '.txt'
+    fileName = parser.outputDirectory + 'newDomains_' + calculatePreviousDay() + '_' + type + '.txt'
     with open(fileName,'w') as file:
         for item in sortScore:
             file.write(str(item)+'\n')
