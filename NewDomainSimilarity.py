@@ -50,8 +50,10 @@ def retrieveDomainList():
     date = calculatePreviousDay()
     domainlist = []
     headers = { 'User-Agent': 'Threat Intelligence Research'}
+    dateValue = date + '.zip'
+    dateB64 = base64.b64encode(dateValue.encode('utf-8')).decode('utf-8')
     #format: https://whoisds.com//whois-database/newly-registered-domains/YYYY-MM-DD.zip/nrd
-    url = 'https://whoisds.com/whois-database/newly-registered-domains/' + date + '.zip/nrd'
+    url = 'https://whoisds.com/whois-database/newly-registered-domains/' + dateB64 + '/nrd'
     #print(url)
     try:
         response = requests.get(url)
